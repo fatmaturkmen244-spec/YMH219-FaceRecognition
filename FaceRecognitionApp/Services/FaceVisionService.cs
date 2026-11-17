@@ -1,5 +1,7 @@
 using OpenCvSharp;
 using FaceRecognitionApp.Models;
+using CvPoint = OpenCvSharp.Point;
+using CvSize = OpenCvSharp.Size;
 
 namespace FaceRecognitionApp.Services;
 
@@ -86,7 +88,7 @@ public sealed class FaceVisionService
                 using Mat gray = new();
                 Cv2.CvtColor(frame, gray, ColorConversionCodes.BGR2GRAY);
                 Cv2.EqualizeHist(gray, gray);
-                Rect[] haarFaces = classifier.DetectMultiScale(gray, 1.1, 4, HaarDetectionTypes.ScaleImage, new Size(50, 50));
+                Rect[] haarFaces = classifier.DetectMultiScale(gray, 1.1, 4, HaarDetectionTypes.ScaleImage, new CvSize(50, 50));
                 if (haarFaces.Length > 0)
                 {
                     return haarFaces.OrderBy(r => r.X).ToList();
@@ -106,13 +108,13 @@ public sealed class FaceVisionService
         // Cilt ve portre tonu aralığı
         Cv2.InRange(hsv, new Scalar(0, 18, 95), new Scalar(179, 170, 245), mask);
 
-        using Mat kernel = Cv2.GetStructuringElement(MorphShapes.Ellipse, new Size(9, 9));
+        using Mat kernel = Cv2.GetStructuringElement(MorphShapes.Ellipse, new CvSize(9, 9));
         Cv2.MorphologyEx(mask, mask, MorphTypes.Close, kernel);
         Cv2.MorphologyEx(mask, mask, MorphTypes.Open, kernel);
 
-        Cv2.FindContours(mask, out Point[][] contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+        Cv2.FindContours(mask, out CvPoint[][] contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
 
-        foreach (Point[] contour in contours)
+        foreach (CvPoint[] contour in contours)
         {
             double area = Cv2.ContourArea(contour);
             if (area < 3500)
@@ -189,10 +191,10 @@ public sealed class FaceVisionService
 
         // Köşe biyometrik braketleri
         int cornerLen = Math.Min(22, r.Width / 4);
-        Cv2.Line(frame, new Point(r.Left, r.Top), new Point(r.Left + cornerLen, r.Top), new Scalar(255, 255, 255), 3);
-        Cv2.Line(frame, new Point(r.Left, r.Top), new Point(r.Left, r.Top + cornerLen), new Scalar(255, 255, 255), 3);
-        Cv2.Line(frame, new Point(r.Right, r.Top), new Point(r.Right - cornerLen, r.Top), new Scalar(255, 255, 255), 3);
-        Cv2.Line(frame, new Point(r.Right, r.Top), new Point(r.Right, r.Top + cornerLen), new Scalar(255, 255, 255), 3);
+        Cv2.Line(frame, new CvPoint(r.Left, r.Top), new CvPoint(r.Left + cornerLen, r.Top), new Scalar(255, 255, 255), 3);
+        Cv2.Line(frame, new CvPoint(r.Left, r.Top), new CvPoint(r.Left, r.Top + cornerLen), new Scalar(255, 255, 255), 3);
+        Cv2.Line(frame, new CvPoint(r.Right, r.Top), new CvPoint(r.Right - cornerLen, r.Top), new Scalar(255, 255, 255), 3);
+        Cv2.Line(frame, new CvPoint(r.Right, r.Top), new CvPoint(r.Right, r.Top + cornerLen), new Scalar(255, 255, 255), 3);
 
         // Üst etiket şeridi (Etiket + Güven Skoru)
         string badgeText = $"{info.PredictedLabel} (%{info.ConfidencePercent:0.0})";
@@ -205,7 +207,7 @@ public sealed class FaceVisionService
         Cv2.PutText(
             frame,
             badgeText,
-            new Point(bannerRect.X + 6, bannerRect.Y + 17),
+            new CvPoint(bannerRect.X + 6, bannerRect.Y + 17),
             HersheyFonts.HersheySimplex,
             0.50,
             new Scalar(240, 255, 240),

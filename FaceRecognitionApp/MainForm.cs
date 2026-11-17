@@ -1,7 +1,8 @@
 using OpenCvSharp;
-using OpenCvSharp.Extensions;
 using FaceRecognitionApp.Models;
 using FaceRecognitionApp.Services;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace FaceRecognitionApp;
 
@@ -441,7 +442,9 @@ public sealed class MainForm : Form
 
     private void UpdateViewportAndResults(Mat annotatedMat, string statusText)
     {
-        Bitmap newBmp = BitmapConverter.ToBitmap(annotatedMat);
+        byte[] pngBytes = annotatedMat.ToBytes(".png");
+        using MemoryStream ms = new(pngBytes);
+        Bitmap newBmp = new(ms);
         Image? oldImg = _picViewport.Image;
         _picViewport.Image = newBmp;
         oldImg?.Dispose();

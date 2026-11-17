@@ -1,5 +1,7 @@
 using OpenCvSharp;
 using FaceRecognitionApp.Models;
+using CvPoint = OpenCvSharp.Point;
+using CvSize = OpenCvSharp.Size;
 
 namespace FaceRecognitionApp.Services;
 
@@ -102,7 +104,7 @@ public sealed class SampleDatasetService
     {
         using Mat canvas = new(440, 580, MatType.CV_8UC3, new Scalar(34, 42, 56));
         DrawBackgroundGrid(canvas);
-        DrawSyntheticPerson(canvas, new Point(290, 210), new Size(92, 115), new Scalar(195, 175, 145), new Scalar(65, 45, 35), "GONULLU SINIF #1: FATMA");
+        DrawSyntheticPerson(canvas, new CvPoint(290, 210), new CvSize(92, 115), new Scalar(195, 175, 145), new Scalar(65, 45, 35), "GONULLU SINIF #1: FATMA");
         Cv2.ImWrite(path, canvas);
     }
 
@@ -110,7 +112,7 @@ public sealed class SampleDatasetService
     {
         using Mat canvas = new(440, 580, MatType.CV_8UC3, new Scalar(38, 48, 44));
         DrawBackgroundGrid(canvas);
-        DrawSyntheticPerson(canvas, new Point(290, 215), new Size(95, 118), new Scalar(155, 185, 205), new Scalar(40, 50, 60), "GONULLU SINIF #2: AHMET");
+        DrawSyntheticPerson(canvas, new CvPoint(290, 215), new CvSize(95, 118), new Scalar(155, 185, 205), new Scalar(40, 50, 60), "GONULLU SINIF #2: AHMET");
         Cv2.ImWrite(path, canvas);
     }
 
@@ -118,8 +120,8 @@ public sealed class SampleDatasetService
     {
         using Mat canvas = new(440, 580, MatType.CV_8UC3, new Scalar(30, 36, 52));
         DrawBackgroundGrid(canvas);
-        DrawSyntheticPerson(canvas, new Point(175, 215), new Size(80, 102), new Scalar(195, 175, 145), new Scalar(60, 40, 30), "COKLU YUZ TESTI (FATMA & AHMET & ZEYNEP)");
-        DrawSyntheticPerson(canvas, new Point(395, 215), new Size(82, 104), new Scalar(155, 185, 205), new Scalar(35, 45, 55), string.Empty);
+        DrawSyntheticPerson(canvas, new CvPoint(175, 215), new CvSize(80, 102), new Scalar(195, 175, 145), new Scalar(60, 40, 30), "COKLU YUZ TESTI (FATMA & AHMET & ZEYNEP)");
+        DrawSyntheticPerson(canvas, new CvPoint(395, 215), new CvSize(82, 104), new Scalar(155, 185, 205), new Scalar(35, 45, 55), string.Empty);
         Cv2.ImWrite(path, canvas);
     }
 
@@ -128,42 +130,42 @@ public sealed class SampleDatasetService
         Scalar gridColor = new(48, 58, 74);
         for (int x = 0; x < mat.Width; x += 40)
         {
-            Cv2.Line(mat, new Point(x, 0), new Point(x, mat.Height), gridColor, 1);
+            Cv2.Line(mat, new CvPoint(x, 0), new CvPoint(x, mat.Height), gridColor, 1);
         }
         for (int y = 0; y < mat.Height; y += 40)
         {
-            Cv2.Line(mat, new Point(0, y), new Point(mat.Width, y), gridColor, 1);
+            Cv2.Line(mat, new CvPoint(0, y), new CvPoint(mat.Width, y), gridColor, 1);
         }
     }
 
-    private static void DrawSyntheticPerson(Mat mat, Point center, Size axes, Scalar skinTone, Scalar hairColor, string bannerText)
+    private static void DrawSyntheticPerson(Mat mat, CvPoint center, CvSize axes, Scalar skinTone, Scalar hairColor, string bannerText)
     {
         // Omuz/Gövde
-        Cv2.Ellipse(mat, new Point(center.X, center.Y + axes.Height + 48), new Size(axes.Width + 42, 75), 0, 180, 360, new Scalar(90, 110, 140), -1, LineTypes.AntiAlias);
+        Cv2.Ellipse(mat, new CvPoint(center.X, center.Y + axes.Height + 48), new CvSize(axes.Width + 42, 75), 0, 180, 360, new Scalar(90, 110, 140), -1, LineTypes.AntiAlias);
 
         // Saç ve Baş silüeti (Yüz algılayıcı işaretçi piksel imzası ile)
-        Cv2.Ellipse(mat, new Point(center.X, center.Y - 12), new Size(axes.Width + 8, axes.Height + 10), 0, 0, 360, hairColor, -1, LineTypes.AntiAlias);
+        Cv2.Ellipse(mat, new CvPoint(center.X, center.Y - 12), new CvSize(axes.Width + 8, axes.Height + 10), 0, 0, 360, hairColor, -1, LineTypes.AntiAlias);
         Cv2.Ellipse(mat, center, axes, 0, 0, 360, skinTone, -1, LineTypes.AntiAlias);
 
         // Gözler
         int eyeY = center.Y - axes.Height / 5;
         int eyeOffsetX = axes.Width / 3;
-        Cv2.Circle(mat, new Point(center.X - eyeOffsetX, eyeY), 11, Scalar.White, -1, LineTypes.AntiAlias);
-        Cv2.Circle(mat, new Point(center.X + eyeOffsetX, eyeY), 11, Scalar.White, -1, LineTypes.AntiAlias);
-        Cv2.Circle(mat, new Point(center.X - eyeOffsetX, eyeY), 5, new Scalar(35, 35, 35), -1, LineTypes.AntiAlias);
-        Cv2.Circle(mat, new Point(center.X + eyeOffsetX, eyeY), 5, new Scalar(35, 35, 35), -1, LineTypes.AntiAlias);
+        Cv2.Circle(mat, new CvPoint(center.X - eyeOffsetX, eyeY), 11, Scalar.White, -1, LineTypes.AntiAlias);
+        Cv2.Circle(mat, new CvPoint(center.X + eyeOffsetX, eyeY), 11, Scalar.White, -1, LineTypes.AntiAlias);
+        Cv2.Circle(mat, new CvPoint(center.X - eyeOffsetX, eyeY), 5, new Scalar(35, 35, 35), -1, LineTypes.AntiAlias);
+        Cv2.Circle(mat, new CvPoint(center.X + eyeOffsetX, eyeY), 5, new Scalar(35, 35, 35), -1, LineTypes.AntiAlias);
 
         // Kaşlar
-        Cv2.Ellipse(mat, new Point(center.X - eyeOffsetX, eyeY - 14), new Size(16, 4), 0, 190, 350, hairColor, 3, LineTypes.AntiAlias);
-        Cv2.Ellipse(mat, new Point(center.X + eyeOffsetX, eyeY - 14), new Size(16, 4), 0, 190, 350, hairColor, 3, LineTypes.AntiAlias);
+        Cv2.Ellipse(mat, new CvPoint(center.X - eyeOffsetX, eyeY - 14), new CvSize(16, 4), 0, 190, 350, hairColor, 3, LineTypes.AntiAlias);
+        Cv2.Ellipse(mat, new CvPoint(center.X + eyeOffsetX, eyeY - 14), new CvSize(16, 4), 0, 190, 350, hairColor, 3, LineTypes.AntiAlias);
 
         // Burun ve Ağız
-        Cv2.Line(mat, new Point(center.X, eyeY + 6), new Point(center.X - 5, center.Y + 18), new Scalar(120, 110, 100), 2, LineTypes.AntiAlias);
-        Cv2.Ellipse(mat, new Point(center.X, center.Y + axes.Height / 3), new Size(26, 10), 0, 15, 165, new Scalar(95, 70, 145), 3, LineTypes.AntiAlias);
+        Cv2.Line(mat, new CvPoint(center.X, eyeY + 6), new CvPoint(center.X - 5, center.Y + 18), new Scalar(120, 110, 100), 2, LineTypes.AntiAlias);
+        Cv2.Ellipse(mat, new CvPoint(center.X, center.Y + axes.Height / 3), new CvSize(26, 10), 0, 15, 165, new Scalar(95, 70, 145), 3, LineTypes.AntiAlias);
 
         if (!string.IsNullOrEmpty(bannerText))
         {
-            Cv2.PutText(mat, bannerText, new Point(18, 30), HersheyFonts.HersheySimplex, 0.58, new Scalar(200, 230, 220), 1, LineTypes.AntiAlias);
+            Cv2.PutText(mat, bannerText, new CvPoint(18, 30), HersheyFonts.HersheySimplex, 0.58, new Scalar(200, 230, 220), 1, LineTypes.AntiAlias);
         }
     }
 }
