@@ -56,7 +56,7 @@ public sealed class SampleDatasetService
 
         Scalar avgColor = faceRoi != null && !faceRoi.Empty()
             ? Cv2.Mean(faceRoi)
-            : new Scalar(175, 175, 175);
+            : new Scalar(210, 120, 180);
 
         VolunteerProfile? existing = _profiles.FirstOrDefault(p =>
             p.Label.Equals(cleanLabel, StringComparison.OrdinalIgnoreCase));

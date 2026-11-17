@@ -151,7 +151,13 @@ public sealed class FaceVisionService
             return ("Bilinmeyen", 60.0);
         }
 
-        Scalar meanBgr = Cv2.Mean(faceRoi);
+        Rect centerPatch = new(
+            Math.Max(0, faceRoi.Width / 4),
+            Math.Max(0, faceRoi.Height / 3),
+            Math.Max(1, faceRoi.Width / 2),
+            Math.Max(1, faceRoi.Height / 3));
+        using Mat skinCenter = new(faceRoi, centerPatch);
+        Scalar meanBgr = Cv2.Mean(skinCenter);
         VolunteerProfile bestMatch = profiles[0];
         double minDistance = double.MaxValue;
 
