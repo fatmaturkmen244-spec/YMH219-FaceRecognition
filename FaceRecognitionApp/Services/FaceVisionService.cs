@@ -100,15 +100,12 @@ public sealed class FaceVisionService
             }
         }
 
-        // 2. OpenCV Renk Uzayı & Morfolojik Kontur Analizi ile Yüz Bölgesi Tespiti (Çoklu yüz destekli)
-        using Mat hsv = new();
-        Cv2.CvtColor(frame, hsv, ColorConversionCodes.BGR2HSV);
-
+        // 2. OpenCV BGR/HSV Cilt & Yüz Bölgesi Segmentasyonu (Çoklu yüz destekli)
         using Mat mask = new();
-        // Cilt ve portre tonu aralığı
-        Cv2.InRange(hsv, new Scalar(0, 18, 95), new Scalar(179, 170, 245), mask);
+        // BGR uzayında sıcak cilt tonu eşiği (B: 100..210, G: 130..230, R: 185..255)
+        Cv2.InRange(frame, new Scalar(100, 130, 185), new Scalar(215, 235, 255), mask);
 
-        using Mat kernel = Cv2.GetStructuringElement(MorphShapes.Ellipse, new CvSize(9, 9));
+        using Mat kernel = Cv2.GetStructuringElement(MorphShapes.Ellipse, new CvSize(11, 11));
         Cv2.MorphologyEx(mask, mask, MorphTypes.Close, kernel);
         Cv2.MorphologyEx(mask, mask, MorphTypes.Open, kernel);
 
@@ -123,13 +120,11 @@ public sealed class FaceVisionService
             }
 
             Rect bbox = Cv2.BoundingRect(contour);
-            // Gövdeyi dışarıda bırakıp baş/yüz bölgesine odaklan
-            int faceHeight = Math.Min(bbox.Height, (int)(bbox.Width * 1.28));
             Rect faceRect = new(
-                bbox.X - 8,
-                bbox.Y - 12,
-                bbox.Width + 16,
-                faceHeight + 16);
+                bbox.X - 10,
+                bbox.Y - 14,
+                bbox.Width + 20,
+                bbox.Height + 22);
 
             if (faceRect.Width >= 60 && faceRect.Height >= 60)
             {

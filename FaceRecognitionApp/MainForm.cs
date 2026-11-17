@@ -125,7 +125,7 @@ public sealed class MainForm : Form
         viewportContainer.Controls.Add(_picViewport);
 
         // Kamera ve Görüntü Seçim Butonları (Asgari + İsteğe Bağlı Gereksinimler)
-        _btnCameraStart = CreateVisionButton("📷 Kamera Başlat", 16, 456, 136, 34, Color.FromArgb(13, 148, 136), Color.White);
+        _btnCameraStart = CreateVisionButton("▶ Kamera Başlat", 16, 456, 136, 34, Color.FromArgb(13, 148, 136), Color.White);
         _btnCameraStart.Click += (_, _) => HandleStartCamera();
         viewportContainer.Controls.Add(_btnCameraStart);
 
@@ -134,7 +134,7 @@ public sealed class MainForm : Form
         _btnCameraStop.Click += (_, _) => HandleStopCamera();
         viewportContainer.Controls.Add(_btnCameraStop);
 
-        _btnSelectImage = CreateVisionButton("📂 Görüntü Seç...", 300, 456, 138, 34, Color.FromArgb(14, 116, 144), Color.White);
+        _btnSelectImage = CreateVisionButton("📂 Görüntü Seç", 300, 456, 138, 34, Color.FromArgb(14, 116, 144), Color.White);
         _btnSelectImage.Click += (_, _) => HandleSelectImageFromFile();
         viewportContainer.Controls.Add(_btnSelectImage);
 
@@ -325,7 +325,7 @@ public sealed class MainForm : Form
         };
         trainingPanel.Controls.Add(_txtNewLabel);
 
-        _btnAddTrainingSample = CreateVisionButton("➕ Eğitime Ekle", 196, 174, 114, 28, Color.FromArgb(16, 185, 129), Color.White);
+        _btnAddTrainingSample = CreateVisionButton("+ Ekle", 196, 174, 114, 28, Color.FromArgb(16, 185, 129), Color.White);
         _btnAddTrainingSample.Click += (_, _) => HandleAddTrainingSample();
         trainingPanel.Controls.Add(_btnAddTrainingSample);
 
@@ -663,8 +663,8 @@ public sealed class MainForm : Form
         }
 
         // Ekran Görüntüsü 2: Çoklu Yüz İşaretleme + Yeni Eğitim Sınıfı Ekleme + Yüzleri Klasöre Kaydetme Durumu
-        _txtNewLabel.Text = "Mehmet_Ornek4";
-        HandleAddTrainingSample();
+        _datasetService.AddOrUpdateVolunteer("Mehmet_Ornek4", null);
+        RefreshDatasetClassList();
         _cmbSampleSelector.SelectedIndex = 2;
         LoadSelectedSampleImage(2);
         _lblFooterStatus.Text = "Başarılı: Karedeki 2 yüz ayrı ayrı işaretlendi ve 'DetectedFaces/' klasörüne kaydedildi.";

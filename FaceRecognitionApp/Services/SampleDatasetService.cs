@@ -36,9 +36,9 @@ public sealed class SampleDatasetService
     {
         // En az 2 gönüllü/yerel örnek sınıf (Föy gereksinimi) + 3. örnek sınıf
         _profiles.Clear();
-        _profiles.Add(new VolunteerProfile("Fatma_Ornek1", 4, new Scalar(195, 175, 145)));
-        _profiles.Add(new VolunteerProfile("Ahmet_Ornek2", 3, new Scalar(155, 185, 205)));
-        _profiles.Add(new VolunteerProfile("Zeynep_Ornek3", 3, new Scalar(185, 155, 195)));
+        _profiles.Add(new VolunteerProfile("Fatma_Ornek1", 4, new Scalar(145, 175, 225)));
+        _profiles.Add(new VolunteerProfile("Ahmet_Ornek2", 3, new Scalar(165, 200, 242)));
+        _profiles.Add(new VolunteerProfile("Zeynep_Ornek3", 3, new Scalar(185, 155, 215)));
 
         // Örnek test görüntülerini oluştur (Kamera olmayan bilgisayarlarda doğrudan test için)
         CreateSampleImage1(Path.Combine(SampleImagesDirectory, "Ornek1_Fatma_Portre.png"));
@@ -104,7 +104,7 @@ public sealed class SampleDatasetService
     {
         using Mat canvas = new(440, 580, MatType.CV_8UC3, new Scalar(34, 42, 56));
         DrawBackgroundGrid(canvas);
-        DrawSyntheticPerson(canvas, new CvPoint(290, 210), new CvSize(92, 115), new Scalar(195, 175, 145), new Scalar(65, 45, 35), "GONULLU SINIF #1: FATMA");
+        DrawSyntheticPerson(canvas, new CvPoint(290, 210), new CvSize(84, 106), new Scalar(145, 175, 225), new Scalar(35, 30, 28), "GONULLU SINIF #1: FATMA");
         Cv2.ImWrite(path, canvas);
     }
 
@@ -112,7 +112,7 @@ public sealed class SampleDatasetService
     {
         using Mat canvas = new(440, 580, MatType.CV_8UC3, new Scalar(38, 48, 44));
         DrawBackgroundGrid(canvas);
-        DrawSyntheticPerson(canvas, new CvPoint(290, 215), new CvSize(95, 118), new Scalar(155, 185, 205), new Scalar(40, 50, 60), "GONULLU SINIF #2: AHMET");
+        DrawSyntheticPerson(canvas, new CvPoint(290, 215), new CvSize(86, 108), new Scalar(165, 200, 242), new Scalar(30, 35, 42), "GONULLU SINIF #2: AHMET");
         Cv2.ImWrite(path, canvas);
     }
 
@@ -120,8 +120,8 @@ public sealed class SampleDatasetService
     {
         using Mat canvas = new(440, 580, MatType.CV_8UC3, new Scalar(30, 36, 52));
         DrawBackgroundGrid(canvas);
-        DrawSyntheticPerson(canvas, new CvPoint(175, 215), new CvSize(80, 102), new Scalar(195, 175, 145), new Scalar(60, 40, 30), "COKLU YUZ TESTI (FATMA & AHMET & ZEYNEP)");
-        DrawSyntheticPerson(canvas, new CvPoint(395, 215), new CvSize(82, 104), new Scalar(155, 185, 205), new Scalar(35, 45, 55), string.Empty);
+        DrawSyntheticPerson(canvas, new CvPoint(155, 215), new CvSize(74, 96), new Scalar(145, 175, 225), new Scalar(35, 30, 28), "COKLU YUZ TESTI: FATMA & AHMET");
+        DrawSyntheticPerson(canvas, new CvPoint(425, 215), new CvSize(76, 98), new Scalar(165, 200, 242), new Scalar(30, 35, 42), string.Empty);
         Cv2.ImWrite(path, canvas);
     }
 
@@ -140,8 +140,8 @@ public sealed class SampleDatasetService
 
     private static void DrawSyntheticPerson(Mat mat, CvPoint center, CvSize axes, Scalar skinTone, Scalar hairColor, string bannerText)
     {
-        // Omuz/Gövde
-        Cv2.Ellipse(mat, new CvPoint(center.X, center.Y + axes.Height + 48), new CvSize(axes.Width + 42, 75), 0, 180, 360, new Scalar(90, 110, 140), -1, LineTypes.AntiAlias);
+        // Omuz/Gövde (Koyu lacivert ceket - yüz maskesinden tamamen ayrı)
+        Cv2.Ellipse(mat, new CvPoint(center.X, center.Y + axes.Height + 52), new CvSize(axes.Width + 24, 68), 0, 180, 360, new Scalar(65, 50, 40), -1, LineTypes.AntiAlias);
 
         // Saç ve Baş silüeti (Yüz algılayıcı işaretçi piksel imzası ile)
         Cv2.Ellipse(mat, new CvPoint(center.X, center.Y - 12), new CvSize(axes.Width + 8, axes.Height + 10), 0, 0, 360, hairColor, -1, LineTypes.AntiAlias);
